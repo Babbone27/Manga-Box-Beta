@@ -175,6 +175,21 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
             height: 85vh;
           }
         }
+        
+        /* Hide calendar icon on date inputs */
+        .volume-date-input::-webkit-calendar-picker-indicator {
+            display: none !important;
+            -webkit-appearance: none;
+        }
+        .volume-date-input::-webkit-inner-spin-button,
+        .volume-date-input::-webkit-clear-button {
+            display: none !important;
+        }
+        .volume-date-input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
       </style>
       <!-- Modal Card -->
       <div 
@@ -478,9 +493,9 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                             border: 1px solid var(--border-color);
                             color: var(--secondary-text-color);
                             border-radius: 8px;
-                            padding: 0 4px;
-                            height: 32px;
-                            font-size: 12px;
+                            padding: 0 8px;
+                            height: 36px;
+                            font-size: 13px;
                             text-align: center;
                             cursor: pointer;
                             font-family: inherit;
@@ -505,8 +520,8 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                     title="Segna come letto fino a qui"
                     onClick=${(e) => { e.stopPropagation(); markReadUntil(vol); }}
                     style="
-                      width: 32px;
-                      height: 32px;
+                      width: 36px;
+                      height: 36px;
                       border-radius: 50%; 
                       border: 1px solid var(--border-color); 
                       cursor: pointer; 
@@ -517,6 +532,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                       align-items: center;
                       justify-content: center;
                       flex-shrink: 0;
+                      box-sizing: border-box;
                     "
                     onMouseEnter=${e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'; e.currentTarget.style.color = 'var(--primary-color)'; e.currentTarget.style.borderColor = 'var(--primary-color)'; }}
                     onMouseLeave=${e => { e.currentTarget.style.background = 'rgba(0, 0, 0, 0.2)'; e.currentTarget.style.color = 'var(--secondary-text-color)'; e.currentTarget.style.borderColor = 'var(--border-color)'; }}
@@ -530,10 +546,10 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                       flex: 1;
                       min-width: 0;
                       max-width: 120px;
-                      height: 32px;
+                      height: 36px;
                       padding: 0 8px; 
                       border-radius: 10px; 
-                      font-size: 11px; 
+                      font-size: 12px; 
                       font-weight: 700; 
                       cursor: pointer; 
                       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -548,13 +564,14 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                       display: flex;
                       align-items: center;
                       justify-content: center;
+                      box-sizing: border-box;
                     "
                     onMouseDown=${e => e.currentTarget.style.transform = 'scale(0.95)'}
                     onMouseUp=${e => e.currentTarget.style.transform = 'scale(1)'}
                   >
                     ${vol.read ? 'LETTO' : 'DA LEGGERE'}
                   </button>
-                  <button onClick=${() => deleteVolume(vol.id)} style="background: none; border: none; color: var(--error-color); cursor: pointer; opacity: 0.6; transition: opacity 0.2s; padding: 4px; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; margin-left: 2px;" onMouseEnter=${e => e.target.style.opacity = '1'} onMouseLeave=${e => e.target.style.opacity = '0.6'}>
+                  <button onClick=${() => deleteVolume(vol.id)} style="background: none; border: none; color: var(--error-color); cursor: pointer; opacity: 0.6; transition: opacity 0.2s; padding: 4px; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; flex-shrink: 0; margin-left: 2px; box-sizing: border-box;" onMouseEnter=${e => e.target.style.opacity = '1'} onMouseLeave=${e => e.target.style.opacity = '0.6'}>
                     <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 96 960 960" width="16" fill="currentColor"><path d="M280 936q-33 0-56.5-23.5T200 856V336h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680 936H280Zm400-600H280v520h400V336ZM360 776h80V396h-80v380Zm160 0h80V396h-80v380ZM280 336v520-520Z"/></svg>
                   </button>
                 </div>
