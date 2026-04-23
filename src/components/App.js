@@ -187,8 +187,12 @@ const LibraryGrid = ({ mangaList, onMangaClick, viewMode, gridColumns = 5 }) => 
 
 
 
+  // On mobile (<600px), let CSS handle columns. On desktop, use the setting.
+  const isMobileScreen = window.innerWidth < 600;
+  const gridStyle = isMobileScreen ? '' : `grid-template-columns: repeat(${gridColumns}, 1fr);`;
+
   return html`
-    <div class="library-grid" style="grid-template-columns: repeat(${gridColumns}, 1fr);">
+    <div class="library-grid" style="${gridStyle}">
       ${mangaList.map((manga, index) => {
     const progress = getReadingProgress(manga);
     return html`
@@ -371,8 +375,6 @@ export default function App() {
     }
   }, [view]);
 
-  const touchStart = useRef(null);
-  const touchEnd = useRef(null);
 
   useEffect(() => {
     const loadedSettings = getSettings();
@@ -385,9 +387,27 @@ export default function App() {
     loadLibrary();
   }, []);
 
+  // History API: handle browser back button / gesture
+  useEffect(() => {
+    const handlePopState = (e) => {
+      const state = e.state;
+      if (state && state.view) {
+        setView(state.view);
+        if (state.view === 'main') {
+          setSelectedManga(null);
+        }
+      } else {
+        // No state = initial page, go to main
+        if (view !== 'main') {
+          setView('main');
+          setSelectedManga(null);
+        }
+      }
+    };
 
-
-
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [view]);
 
   const updateSettings = (newSettings) => {
     setSettings(newSettings);
@@ -446,34 +466,6 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [view, showFilters, viewMode, activeTab, settings]);
 
-  const onTouchStart = (e) => {
-    touchEnd.current = null;
-    touchStart.current = e.targetTouches[0].clientX;
-  };
-
-  const onTouchMove = (e) => {
-    touchEnd.current = e.targetTouches[0].clientX;
-  };
-
-  const onTouchEnd = () => {
-    if (!touchStart.current || !touchEnd.current) return;
-    const distance = touchStart.current - touchEnd.current;
-    const isLeftSwipe = distance > 100; // Increased threshold for less sensitivity
-    const isRightSwipe = distance < -100;
-
-    if (view === 'main') {
-      const tabs = ['library', 'letture', 'wishlist', 'updates', 'info']; // Fixed order
-      const currentIndex = tabs.indexOf(activeTab);
-
-      if (isLeftSwipe && currentIndex < tabs.length - 1) {
-        setActiveTab(tabs[currentIndex + 1]);
-      }
-      if (isRightSwipe && currentIndex > 0) {
-        setActiveTab(tabs[currentIndex - 1]);
-      }
-    }
-  };
-
   const loadLibrary = async () => {
     const list = await getAllManga();
     setMangaList(list);
@@ -504,9 +496,14 @@ export default function App() {
   const handleCancel = () => {
     if (selectedManga && view === 'edit') {
       setView('details');
+      // Don't push state - we're going back
     } else {
       setView('main');
       setSelectedManga(null);
+    }
+    // Use history.back() only if we pushed a state for this view
+    if (history.state && history.state.view) {
+      history.back();
     }
   };
 
@@ -516,6 +513,8 @@ export default function App() {
     }
     setSelectedManga(manga);
     setView('details');
+    // Push history state so back gesture returns to list
+    history.pushState({ view: 'details' }, '');
   };
 
   const libraryList = useMemo(() => mangaList.filter(m => !m.collection || m.collection === 'library'), [mangaList]);
@@ -586,7 +585,7 @@ export default function App() {
         content = html`<${Statistics} mangaList=${libraryList} lettureList=${lettureList} settings=${settings} />`;
         break;
       case 'info':
-        content = html`<${Info} onRefresh=${loadLibrary} settings=${settings} onSettingsChange=${updateSettings} onOpenHistory=${() => setView('history')} />`;
+        content = html`<${Info} onRefresh=${loadLibrary} settings=${settings} onSettingsChange=${updateSettings} onOpenHistory=${() => { setView('history'); history.pushState({ view: 'history' }, ''); }} />`;
         break;
       default:
         content = html`<div class="container">Libreria</div>`;
@@ -614,8 +613,8 @@ export default function App() {
     return html`
       <${MangaDetails} 
         manga=${selectedManga || null} 
-        onEdit=${() => setView('edit')} 
-        onBack=${() => { setView('main'); setSelectedManga(null); }}
+        onEdit=${() => { setView('edit'); history.pushState({ view: 'edit' }, ''); }} 
+        onBack=${() => { setView('main'); setSelectedManga(null); if (history.state && history.state.view) history.back(); }}
         onUpdate=${handleUpdateManga}
       />
     `;
@@ -803,9 +802,6 @@ export default function App() {
           ref=${mainContentRef}
           class="main-content"
           style="flex: 1; overflow-y: auto; overflow-x: hidden; position: relative;"
-          onTouchStart=${onTouchStart}
-          onTouchMove=${onTouchMove}
-          onTouchEnd=${onTouchEnd}
         >
           ${renderContent()}
         </div>
@@ -818,7 +814,7 @@ export default function App() {
 
 
         ${(activeTab === 'library' || activeTab === 'wishlist') && view === 'main' ? html`
-        <button class="fab" onClick=${() => setView('create')}>
+        <button class="fab" onClick=${() => { setView('create'); history.pushState({ view: 'create' }, ''); }}>
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24" fill="currentColor">
             <path d="M440 856V616H200v-80h240V296h80v240h240v80H520v240h-80z"/>
           </svg>

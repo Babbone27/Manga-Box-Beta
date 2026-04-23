@@ -1,4 +1,4 @@
-const CACHE_NAME = 'manga-box-v1.0';
+const CACHE_NAME = 'manga-box-v1.1';
 
 // Nucleo essenziale "scolpito nella pietra" (App Shell)
 const PRECACHE_ASSETS = [

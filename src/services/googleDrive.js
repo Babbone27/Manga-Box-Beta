@@ -13,6 +13,7 @@ const loadScript = (src) => {
         if (document.querySelector(`script[src="${src}"]`)) return resolve();
         const script = document.createElement('script');
         script.src = src;
+        script.crossOrigin = 'anonymous';
         script.onload = resolve;
         script.onerror = reject;
         document.body.appendChild(script);

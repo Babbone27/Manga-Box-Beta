@@ -366,6 +366,7 @@ export default function Statistics({ mangaList = [], lettureList = [], settings 
         indexAxis: isHorizontal ? 'y' : 'x',
         responsive: true,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
           legend: {
             display: id !== 'cost' && !id.includes('publisher'), // Hide legend for cost and publisher charts
@@ -586,6 +587,7 @@ export default function Statistics({ mangaList = [], lettureList = [], settings 
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: false,
             plugins: { legend: { display: false } },
             scales: {
               y: { beginAtZero: true, grid: { color: getColor('--border-color') }, ticks: { color: getColor('--secondary-text-color') } },
@@ -616,6 +618,7 @@ export default function Statistics({ mangaList = [], lettureList = [], settings 
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: false,
             plugins: { legend: { display: false } },
             scales: {
               y: {
@@ -650,6 +653,7 @@ export default function Statistics({ mangaList = [], lettureList = [], settings 
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: false,
             plugins: { legend: { display: false } },
             scales: {
               y: {
@@ -689,6 +693,7 @@ export default function Statistics({ mangaList = [], lettureList = [], settings 
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: false,
             plugins: { legend: { display: false } },
             scales: {
               y: { beginAtZero: true, grid: { color: getColor('--border-color') }, ticks: { color: getColor('--secondary-text-color') } },

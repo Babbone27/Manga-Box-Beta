@@ -7,7 +7,7 @@
     <meta name="description" content="Manga Box — Gestionale per la tua collezione manga. Traccia volumi, spese, letture e statistiche.">
     <title>Manga Box</title>
     <link rel="stylesheet" href="style.css">
-    <meta name="theme-color" content="#1e1e1e">
+    <meta name="theme-color" content="#1F2335">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
     <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
@@ -43,12 +43,27 @@
         window.onerror = function (msg, url, line, col, error) {
             const el = document.getElementById('error-log');
             el.style.display = 'block';
-            el.innerHTML += '<div>' + msg + ' at ' + url + ':' + line + '</div>';
+            
+            let message = msg;
+            if (msg === 'Script error.') {
+                message = '⚠️ <b>Script error</b> (masked).<br>This happens when external scripts (like Google Drive) fail to load or have issues, often due to AdBlockers or strict in-app browsers (like Telegram). <br>Please try opening the site in a standard browser like Chrome or Safari.';
+            } else {
+                message = '❌ ' + msg + ' at ' + (url || 'unknown') + ':' + (line || 0);
+            }
+            
+            el.innerHTML += '<div style="margin-bottom: 10px; font-family: sans-serif; font-size: 14px; line-height: 1.4;">' + message + '</div>';
+            
+            // Auto-hide after 15 seconds if it's just a script error
+            if (msg === 'Script error.') {
+                setTimeout(() => {
+                    el.style.display = 'none';
+                }, 15000);
+            }
         };
         window.onunhandledrejection = function (event) {
             const el = document.getElementById('error-log');
             el.style.display = 'block';
-            el.innerHTML += '<div>Uncaught Promise Error: ' + event.reason + '</div>';
+            el.innerHTML += '<div style="margin-bottom: 10px;">Uncaught Promise Error: ' + event.reason + '</div>';
         };
     </script>
 
@@ -76,10 +91,43 @@
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then((registration) => {
                     console.log('SW registrato con successo:', registration.scope);
+
+                    // Controlla aggiornamenti
+                    registration.onupdatefound = () => {
+                        const installingWorker = registration.installing;
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // Nuova versione disponibile! Forza aggiornamento
+                                showUpdateNotification();
+                                setTimeout(() => {
+                                    installingWorker.postMessage('skipWaiting');
+                                }, 1500); // 1.5s delay to show the message
+                            }
+                        };
+                    };
                 }).catch((error) => {
                     console.log('Registrazione SW fallita:', error);
                 });
             });
+
+            // Refresh quando il nuovo SW prende il controllo
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    window.location.reload();
+                    refreshing = true;
+                }
+            });
+        }
+
+        function showUpdateNotification() {
+            const el = document.getElementById('error-log');
+            el.style.display = 'block';
+            el.style.background = '#004400'; // Green for update
+            el.style.color = '#ffffff';
+            el.innerHTML = '<div style="display: flex; justify-content: center; align-items: center;">' +
+                '<span>🚀 Aggiornamento alla versione più recente...</span>' +
+                '</div>';
         }
     </script>
 </body>

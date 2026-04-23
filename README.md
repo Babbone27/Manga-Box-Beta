@@ -19,7 +19,8 @@ Benvenuto in **Manga Box**, il gestionale definitivo per tracciare la tua collez
 2.  **Avvio Windows**: Fai doppio clic su `start_app.bat`.
 3.  **Avvio Linux/Mac**: Apri il terminale dentro la cartella Manga Box e digita `./start_app.sh`. Premi invio.
     - A volte il sistema blocca i file .sh per sicurezza. Per sbloccarlo, digita questo comando sul terminale e premi Invio: `chmod +x start_app.sh`
-4.  L'app si aprirà automaticamente nel tuo browser predefinito all'indirizzo `http://localhost:8000` (o sulla prima porta libera).
+4.  L'app si aprirà automaticamente nel tuo browser predefinito all'indirizzo `http://localhost:8000`. 
+    - **Nota**: Usiamo una porta fissa per garantire che il browser mantenga i tuoi dati salvati (IndexedDB). Se la porta è occupata da una vecchia sessione dell'app, lo script proverà a resettarla automaticamente.
 
 ### Utilizzo su Smartphone/Tablet
 Per avere Manga Box sempre con te senza configurare server locali:

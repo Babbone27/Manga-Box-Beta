@@ -935,6 +935,15 @@ html { scrollbar-width: thin; scrollbar-color: var(--primary-color) rgba(0, 0, 0
         display: none !important;
     }
 
+    /* Hide title bar on phones */
+    #title-bar {
+        display: none !important;
+    }
+
+    #app {
+        padding-top: 0 !important;
+    }
+
     .library-grid {
         padding: 0 16px !important;
         gap: 12px;
@@ -952,6 +961,17 @@ html { scrollbar-width: thin; scrollbar-color: var(--primary-color) rgba(0, 0, 0
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+
+    /* Compact volume item layout on mobile */
+    .volume-item {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .volume-item > div:last-child {
+        flex-wrap: wrap;
+        gap: 6px !important;
     }
 
 }
@@ -1021,9 +1041,10 @@ html { scrollbar-width: thin; scrollbar-color: var(--primary-color) rgba(0, 0, 0
         cursor: default;
     }
 
+    /* Don't force search to be too wide on small touch screens */
     .search-input,
     .search-input:focus {
-        width: 180px !important;
+        width: 120px !important;
     }
 
     .logo-container span {

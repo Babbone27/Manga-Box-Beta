@@ -1,15 +1,10 @@
 @echo off
 set PORT=8000
 
-echo Cerco una porta libera a partire dalla %PORT%...
+echo Reset della porta %PORT%...
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr :%PORT% ^| findstr LISTENING') do taskkill /f /pid %%a >nul 2>&1
 
-:checkport
-netstat -ano | findstr :%PORT% >nul
-if %errorlevel% equ 0 (
-    echo Porta %PORT% occupata, provo la successiva...
-    set /a PORT=%PORT%+1
-    goto checkport
-)
+timeout /t 1 /nobreak >nul
 
 echo Avvio Manga Box sulla porta %PORT%...
 

@@ -52,4 +52,10 @@ export const applyTheme = (themeName) => {
     root.style.setProperty('--item-bg-color', theme.itemBg || 'rgba(255,255,255,0.05)');
     root.style.setProperty('--hover-bg-color', theme.hoverBg || 'rgba(255,255,255,0.1)');
     root.style.setProperty('--active-tab-bg', theme.activeTabBg || 'rgba(125, 207, 255, 0.15)');
+
+    // Update meta theme-color for mobile status bar
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+        metaThemeColor.setAttribute('content', theme.surface);
+    }
 };

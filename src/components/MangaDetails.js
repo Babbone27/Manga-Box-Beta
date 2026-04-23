@@ -463,7 +463,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                   ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color);">€ ${parseFloat(vol.price).toFixed(2)}</span>` : null}
                 </div>
                 
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
                   
                   ${vol.read && html`
                     <div style="position: relative; display: flex; align-items: center;">
@@ -486,10 +486,10 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                                 border: 1px solid var(--border-color);
                                 color: var(--secondary-text-color);
                                 border-radius: 12px;
-                                padding: 0 8px;
+                                padding: 0 6px;
                                 height: 28px;
-                                font-size: 12px;
-                                width: 115px;
+                                font-size: 11px;
+                                width: 105px;
                                 cursor: pointer;
                                 font-family: inherit;
                                 box-sizing: border-box;
@@ -526,7 +526,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                   <button 
                     onClick=${(e) => { e.stopPropagation(); toggleRead(vol.id); }}
                     style="
-                      padding: 6px 16px; 
+                      padding: 6px 12px; 
                       border-radius: 12px; 
                       border: none; 
                       font-size: 11px; 
@@ -544,8 +544,8 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                   >
                     ${vol.read ? 'LETTO' : 'DA LEGGERE'}
                   </button>
-                  <button onClick=${() => deleteVolume(vol.id)} style="background: none; border: none; color: var(--error-color); cursor: pointer; opacity: 0.6; transition: opacity 0.2s; padding: 8px; display: flex; align-items: center;" onMouseEnter=${e => e.target.style.opacity = '1'} onMouseLeave=${e => e.target.style.opacity = '0.6'}>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 96 960 960" width="20" fill="currentColor"><path d="M280 936q-33 0-56.5-23.5T200 856V336h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680 936H280Zm400-600H280v520h400V336ZM360 776h80V396h-80v380Zm160 0h80V396h-80v380ZM280 336v520-520Z"/></svg>
+                  <button onClick=${() => deleteVolume(vol.id)} style="background: none; border: none; color: var(--error-color); cursor: pointer; opacity: 0.6; transition: opacity 0.2s; padding: 8px; display: flex; align-items: center; flex-shrink: 0;" onMouseEnter=${e => e.target.style.opacity = '1'} onMouseLeave=${e => e.target.style.opacity = '0.6'}>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 96 960 960" width="18" fill="currentColor"><path d="M280 936q-33 0-56.5-23.5T200 856V336h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680 936H280Zm400-600H280v520h400V336ZM360 776h80V396h-80v380Zm160 0h80V396h-80v380ZM280 336v520-520Z"/></svg>
                   </button>
                 </div>
               </div >
