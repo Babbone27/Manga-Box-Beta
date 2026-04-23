@@ -114,7 +114,7 @@ const LibraryGrid = ({ mangaList, onMangaClick, viewMode, gridColumns = 5 }) => 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
                   <div style="font-size: 12px;">
                     <span style="font-weight: 600;">${volumeCount} volumi</span> 
-                    ${manga.collection !== 'letture' ? html`• <span style="color: var(--primary-color);">€ ${totalCost}</span>` : ''}
+                    ${manga.collection !== 'letture' ? html`• <span style="color: var(--primary-color); white-space: nowrap;">€${"\u00A0"}${totalCost}</span>` : ''}
                   </div>
                   <div style="display: flex; align-items: center; gap: 8px; width: 150px;">
                     <div style="flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
@@ -391,6 +391,13 @@ export default function App() {
   useEffect(() => {
     const handlePopState = (e) => {
       const state = e.state;
+
+      // If filters are open, close them on back gesture
+      if (showFilters) {
+        setShowFilters(false);
+        return;
+      }
+
       if (state && state.view) {
         setView(state.view);
         if (state.view === 'main') {
@@ -407,7 +414,7 @@ export default function App() {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [view]);
+  }, [view, showFilters]);
 
   const updateSettings = (newSettings) => {
     setSettings(newSettings);
@@ -425,7 +432,7 @@ export default function App() {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
 
       if (e.key === 'Escape') {
-        if (showFilters) setShowFilters(false);
+        if (showFilters) { setShowFilters(false); if (history.state && history.state.view === 'filters') history.back(); }
         else if (view !== 'main') {
           setView('main');
           setSelectedManga(null);
@@ -637,7 +644,7 @@ export default function App() {
         setFilters=${setFilters} 
         sortOrder=${sortOrder} 
         setSortOrder=${setSortOrder} 
-        onClose=${() => setShowFilters(false)} 
+        onClose=${() => { setShowFilters(false); if (history.state && history.state.view === 'filters') history.back(); }} 
       />
     `;
   };
@@ -679,8 +686,8 @@ export default function App() {
         <!-- App Bar -->
         <div class="app-bar">
           ${view === 'details' || view === 'history' ? html`
-          <button onClick=${() => { setView('main'); setSelectedManga(null); }} class="icon-button" style="margin-right: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24" fill="currentColor"><path d="M400 976 0 576l400-400 56 57-343 343 343 343-56 57Z"/></svg>
+          <button onClick=${() => { setView('main'); setSelectedManga(null); if (history.state && history.state.view) history.back(); }} class="icon-button" style="margin-right: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
           <div style="flex: 1; font-weight: bold; font-size: 18px;">${getTitle()}</div>
         ` : html`
@@ -784,7 +791,7 @@ export default function App() {
                     ${viewMode === 'table' ? html`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><line x1="3" y1="10" x2="21" y2="10" /><line x1="10" y1="10" x2="10" y2="20" /></svg>` : ''}
                   </button>
                 </div>
-                <button onClick=${() => setShowFilters(true)} class="icon-button">
+                <button onClick=${() => { setShowFilters(true); history.pushState({ view: 'filters' }, ''); }} class="icon-button">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" /><line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" /><line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" /><line x1="2" y1="14" x2="6" y2="14" /><line x1="10" y1="8" x2="14" y2="8" /><line x1="18" y1="16" x2="22" y2="16" /></svg>
                 </button>
               ` : ''}

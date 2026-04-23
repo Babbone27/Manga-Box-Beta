@@ -953,6 +953,7 @@ html { scrollbar-width: thin; scrollbar-color: var(--primary-color) rgba(0, 0, 0
     .app-bar {
         padding: 0 12px;
         height: 56px;
+        border-bottom: none;
     }
 
     .header-content {
@@ -961,17 +962,6 @@ html { scrollbar-width: thin; scrollbar-color: var(--primary-color) rgba(0, 0, 0
         display: flex;
         align-items: center;
         justify-content: space-between;
-    }
-
-    /* Compact volume item layout on mobile */
-    .volume-item {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .volume-item > div:last-child {
-        flex-wrap: wrap;
-        gap: 6px !important;
     }
 
 }

@@ -440,7 +440,7 @@ export default function MangaForm({ manga, onSave, onCancel, onDelete, initialCo
                 onInput=${(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="Inserisci la trama dell'opera..."
                 rows="4"
-                style="padding: 10px; background: var(--background-color); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 12px; resize: vertical; font-family: inherit;"
+                style="padding: 10px; background: var(--background-color); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 12px; resize: none; font-family: inherit;"
               ></textarea>
             </div>
 

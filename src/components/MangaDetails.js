@@ -175,6 +175,15 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
             height: 85vh;
           }
         }
+        /* Hide native calendar arrow/chevron in volume date pickers */
+        .volume-date-input::-webkit-calendar-picker-indicator {
+          display: none !important;
+          -webkit-appearance: none;
+        }
+        .volume-date-input::-webkit-inner-spin-button,
+        .volume-date-input::-webkit-clear-button {
+          display: none;
+        }
       </style>
       <!-- Modal Card -->
       <div 
@@ -231,17 +240,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
           </div>
         </div>
           
-        <!-- Mobile Back Button (Top Left) -->
-        <div class="mobile-only" style="position: absolute; top: 16px; left: 16px; z-index: 10;">
-             <button 
-              onClick=${onBack} 
-              style="background: none; border: none; color: var(--text-color); cursor: pointer; padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; transition: background 0.2s;" 
-              onMouseEnter=${e => e.target.style.background = 'var(--hover-bg-color)'} 
-              onMouseLeave=${e => e.target.style.background = 'transparent'} 
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24" fill="currentColor"><path d="M400 976 0 576l400-400 56 57-343 343 343 343-56 57Z"/></svg>
-            </button>
-        </div>
+
 
         <!-- Actions Top Right -->
         <div style="position: absolute; top: 16px; right: 16px; display: flex; gap: 8px; align-items: center;">
@@ -259,7 +258,6 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
             </button>
             <button 
               onClick=${onBack}
-              class="desktop-only"
               style="background: none; border: none; color: var(--text-color); cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; z-index: 20;"
               onMouseEnter=${e => e.target.style.background = 'var(--hover-bg-color)'} 
               onMouseLeave=${e => e.target.style.background = 'transparent'} 
@@ -454,59 +452,58 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
               <div 
                 key=${vol.id}
                 class="volume-item"
-                style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; transition: all 0.2s ease; border: 1px solid var(--border-color);"
+                style="display: flex; align-items: center; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; transition: all 0.2s ease; border: 1px solid var(--border-color); gap: 8px;"
                 onMouseEnter=${e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'; }}
                 onMouseLeave=${e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; }}
               >
-                <div style="display: flex; flex-direction: column;">
+                <div style="display: flex; flex-direction: column; flex-shrink: 0; min-width: 50px;">
                   <span style="font-weight: bold; font-size: 15px;">Vol. ${(vol.name || vol.number || '?')}</span>
-                  ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color);">€ ${parseFloat(vol.price).toFixed(2)}</span>` : null}
+                  ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color);">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}</span>` : null}
                 </div>
                 
-                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0;">
                   
                   ${vol.read && html`
-                    <div style="position: relative; display: flex; align-items: center;">
-                        <input 
-                            type="date" 
-                            value=${vol.readDate ? new Date(vol.readDate).toISOString().slice(0, 10) : ''}
-                            onChange=${(e) => {
-                                let newDate = null;
-                                if (e.target.value) {
-                                    newDate = new Date(e.target.value).toISOString();
-                                }
-                                const updatedVolumes = volumes.map(v =>
-                                    v.id === vol.id ? { ...v, readDate: newDate } : v
-                                );
-                                setVolumes(updatedVolumes);
-                                onUpdate({ ...manga, volumes: updatedVolumes });
-                            }}
-                            style="
-                                background: rgba(0, 0, 0, 0.2);
-                                border: 1px solid var(--border-color);
-                                color: var(--secondary-text-color);
-                                border-radius: 12px;
-                                padding: 0 6px;
-                                height: 28px;
-                                font-size: 11px;
-                                width: 105px;
-                                cursor: pointer;
-                                font-family: inherit;
-                                box-sizing: border-box;
-                                transition: border-color 0.2s;
-                            "
-                            onMouseEnter=${e => e.currentTarget.style.borderColor = 'var(--primary-color)'}
-                            onMouseLeave=${e => e.currentTarget.style.borderColor = 'var(--border-color)'}
-                            title="Data di lettura"
-                        />
-                    </div>
+                    <input 
+                        type="date" 
+                        class="volume-date-input"
+                        value=${vol.readDate ? new Date(vol.readDate).toISOString().slice(0, 10) : ''}
+                        onChange=${(e) => {
+                            let newDate = null;
+                            if (e.target.value) {
+                                newDate = new Date(e.target.value).toISOString();
+                            }
+                            const updatedVolumes = volumes.map(v =>
+                                v.id === vol.id ? { ...v, readDate: newDate } : v
+                            );
+                            setVolumes(updatedVolumes);
+                            onUpdate({ ...manga, volumes: updatedVolumes });
+                        }}
+                        style="
+                            background: rgba(0, 0, 0, 0.2);
+                            border: 1px solid var(--border-color);
+                            color: var(--secondary-text-color);
+                            border-radius: 8px;
+                            padding: 0 4px;
+                            height: 26px;
+                            font-size: 10px;
+                            width: 90px;
+                            cursor: pointer;
+                            font-family: inherit;
+                            box-sizing: border-box;
+                            transition: border-color 0.2s;
+                        "
+                        onMouseEnter=${e => e.currentTarget.style.borderColor = 'var(--primary-color)'}
+                        onMouseLeave=${e => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                        title="Data di lettura"
+                    />
                   `}
 
                   <button 
                     title="Segna come letto fino a qui"
                     onClick=${(e) => { e.stopPropagation(); markReadUntil(vol); }}
                     style="
-                      padding: 7px; 
+                      padding: 5px; 
                       border-radius: 50%; 
                       border: 1px solid var(--border-color); 
                       cursor: pointer; 
@@ -516,20 +513,20 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                       display: flex;
                       align-items: center;
                       justify-content: center;
+                      flex-shrink: 0;
                     "
                     onMouseEnter=${e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'; e.currentTarget.style.color = 'var(--primary-color)'; e.currentTarget.style.borderColor = 'var(--primary-color)'; }}
                     onMouseLeave=${e => { e.currentTarget.style.background = 'rgba(0, 0, 0, 0.2)'; e.currentTarget.style.color = 'var(--secondary-text-color)'; e.currentTarget.style.borderColor = 'var(--border-color)'; }}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L7 17l-5-5"></path><path d="M22 10l-7.5 7.5L13 16"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L7 17l-5-5"></path><path d="M22 10l-7.5 7.5L13 16"></path></svg>
                   </button>
 
                   <button 
                     onClick=${(e) => { e.stopPropagation(); toggleRead(vol.id); }}
                     style="
-                      padding: 6px 12px; 
-                      border-radius: 12px; 
-                      border: none; 
-                      font-size: 11px; 
+                      padding: 4px 10px; 
+                      border-radius: 10px; 
+                      font-size: 10px; 
                       font-weight: 700; 
                       cursor: pointer; 
                       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -538,14 +535,16 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                       transform: scale(1);
                       letter-spacing: 0.5px;
                       border: 1px solid ${vol.read ? 'var(--primary-color)' : 'var(--secondary-text-color)'};
+                      flex-shrink: 0;
+                      white-space: nowrap;
                     "
                     onMouseDown=${e => e.currentTarget.style.transform = 'scale(0.95)'}
                     onMouseUp=${e => e.currentTarget.style.transform = 'scale(1)'}
                   >
                     ${vol.read ? 'LETTO' : 'DA LEGGERE'}
                   </button>
-                  <button onClick=${() => deleteVolume(vol.id)} style="background: none; border: none; color: var(--error-color); cursor: pointer; opacity: 0.6; transition: opacity 0.2s; padding: 8px; display: flex; align-items: center; flex-shrink: 0;" onMouseEnter=${e => e.target.style.opacity = '1'} onMouseLeave=${e => e.target.style.opacity = '0.6'}>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 96 960 960" width="18" fill="currentColor"><path d="M280 936q-33 0-56.5-23.5T200 856V336h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680 936H280Zm400-600H280v520h400V336ZM360 776h80V396h-80v380Zm160 0h80V396h-80v380ZM280 336v520-520Z"/></svg>
+                  <button onClick=${() => deleteVolume(vol.id)} style="background: none; border: none; color: var(--error-color); cursor: pointer; opacity: 0.6; transition: opacity 0.2s; padding: 4px; display: flex; align-items: center; flex-shrink: 0; margin-left: 2px;" onMouseEnter=${e => e.target.style.opacity = '1'} onMouseLeave=${e => e.target.style.opacity = '0.6'}>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 96 960 960" width="16" fill="currentColor"><path d="M280 936q-33 0-56.5-23.5T200 856V336h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680 936H280Zm400-600H280v520h400V336ZM360 776h80V396h-80v380Zm160 0h80V396h-80v380ZM280 336v520-520Z"/></svg>
                   </button>
                 </div>
               </div >
