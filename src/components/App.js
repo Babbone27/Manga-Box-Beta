@@ -666,7 +666,7 @@ export default function App() {
     {
       id: 'library',
       label: 'Libreria',
-      icon: html`<g class="book-top"><rect x="4" y="4" width="16" height="4.5" rx="1.5" /><path d="M7 4v4.5" opacity="0.4" /></g><g class="book-mid"><rect x="4" y="10" width="16" height="4.5" rx="1.5" /><path d="M7 10v4.5" opacity="0.4" /></g><g class="book-bot"><rect x="4" y="16" width="16" height="4.5" rx="1.5" /><path d="M7 16v4.5" opacity="0.4" /></g>`
+      icon: html`<g class="book-left"><rect x="4.5" y="3" width="6.5" height="18" rx="1.5" /><path d="M4.5 7h6.5" opacity="0.4" /></g><g class="book-right"><rect x="13" y="3" width="6.5" height="18" rx="1.5" /><path d="M13 7h6.5" opacity="0.4" /></g>`
     },
     { id: 'letture', label: 'Letture', icon: html`<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />` },
     { id: 'wishlist', label: 'Wishlist', icon: html`<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />` },
@@ -721,7 +721,8 @@ export default function App() {
     const justBecameActive = activeTab === item.id;
 
     if (justBecameActive) {
-      if (item.id === 'library' || item.id === 'letture') animationClass = ' icon-slide-up';
+      if (item.id === 'library') animationClass = ' icon-library-tilt';
+      else if (item.id === 'letture') animationClass = ' icon-slide-up';
       else if (item.id === 'wishlist') animationClass = ' icon-heartbeat';
       else if (item.id === 'updates') animationClass = ' icon-grow-bars';
       else if (item.id === 'info') animationClass = ' icon-rotate-gear';

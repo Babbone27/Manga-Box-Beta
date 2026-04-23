@@ -7,7 +7,7 @@ const BottomNav = ({ activeTab, setActiveTab }) => {
       id: 'library',
       label: 'Libreria',
       // Icons from App.js (Windows)
-      icon: html`<g class="book-top"><rect x="4" y="4" width="16" height="4.5" rx="1.5" /><path d="M7 4v4.5" opacity="0.4" /></g><g class="book-mid"><rect x="4" y="10" width="16" height="4.5" rx="1.5" /><path d="M7 10v4.5" opacity="0.4" /></g><g class="book-bot"><rect x="4" y="16" width="16" height="4.5" rx="1.5" /><path d="M7 16v4.5" opacity="0.4" /></g>`
+      icon: html`<g class="book-left"><rect x="4.5" y="3" width="6.5" height="18" rx="1.5" /><path d="M4.5 7h6.5" opacity="0.4" /></g><g class="book-right"><rect x="13" y="3" width="6.5" height="18" rx="1.5" /><path d="M13 7h6.5" opacity="0.4" /></g>`
     },
     {
       id: 'letture',
@@ -38,7 +38,8 @@ const BottomNav = ({ activeTab, setActiveTab }) => {
     let animationClass = '';
 
     if (isActive) {
-      if (tab.id === 'library' || tab.id === 'letture') animationClass = ' icon-slide-up';
+      if (tab.id === 'library') animationClass = ' icon-library-tilt';
+      else if (tab.id === 'letture') animationClass = ' icon-slide-up';
       else if (tab.id === 'wishlist') animationClass = ' icon-heartbeat';
       else if (tab.id === 'updates') animationClass = ' icon-grow-bars';
       else if (tab.id === 'info') animationClass = ' icon-rotate-gear';

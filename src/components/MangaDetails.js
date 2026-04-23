@@ -476,15 +476,17 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                             color: var(--secondary-text-color);
                             border-radius: 8px;
                             padding: 0 4px;
-                            height: 26px;
-                            font-size: 10px;
-                            width: 82px;
+                            height: 28px;
+                            font-size: 11px;
+                            width: 86px;
                             text-align: center;
                             cursor: pointer;
                             font-family: inherit;
                             box-sizing: border-box;
                             transition: border-color 0.2s;
                             position: relative;
+                            display: flex;
+                            align-items: center;
                         "
                         onClick=${(e) => {
                             if (e.target.showPicker) {
