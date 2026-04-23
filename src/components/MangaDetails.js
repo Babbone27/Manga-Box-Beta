@@ -467,53 +467,63 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                   ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 4px;">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}</span>` : null}
                 </div>
                 
-                <div style="display: flex; align-items: center; gap: 8px; flex: 2; flex-wrap: nowrap; justify-content: flex-end; min-width: 220px;">
+                <div style="display: flex; align-items: center; gap: 6px; flex: 2; flex-wrap: nowrap; justify-content: flex-end; min-width: 220px;">
                   
                   ${vol.read && html`
-                    <input 
-                        type="date" 
-                        class="volume-date-input"
-                        value=${vol.readDate ? new Date(vol.readDate).toISOString().slice(0, 10) : ''}
-                        onChange=${(e) => {
-                            let newDate = null;
-                            if (e.target.value) {
-                                newDate = new Date(e.target.value).toISOString();
-                            }
-                            const updatedVolumes = volumes.map(v =>
-                                v.id === vol.id ? { ...v, readDate: newDate } : v
-                            );
-                            setVolumes(updatedVolumes);
-                            onUpdate({ ...manga, volumes: updatedVolumes });
-                        }}
-                        style="
-                            flex: 1;
-                            min-width: 90px;
-                            max-width: 140px;
-                            background: rgba(0, 0, 0, 0.2);
-                            border: 1px solid var(--border-color);
-                            color: var(--secondary-text-color);
-                            border-radius: 20px;
-                            padding: 0 12px;
-                            height: 36px;
-                            font-size: 13px;
-                            text-align: center;
-                            cursor: pointer;
-                            font-family: inherit;
-                            box-sizing: border-box;
-                            transition: border-color 0.2s;
-                            position: relative;
-                            display: flex;
-                            align-items: center;
-                        "
-                        onClick=${(e) => {
-                            if (e.target.showPicker) {
-                                try { e.target.showPicker(); } catch (err) {}
-                            }
-                        }}
-                        onMouseEnter=${e => e.currentTarget.style.borderColor = 'var(--primary-color)'}
-                        onMouseLeave=${e => e.currentTarget.style.borderColor = 'var(--border-color)'}
-                        title="Data di lettura"
-                    />
+                    <div style="
+                        flex: 1;
+                        min-width: 90px;
+                        max-width: 140px;
+                        background: rgba(0, 0, 0, 0.2);
+                        border: 1px solid var(--border-color);
+                        color: var(--secondary-text-color);
+                        border-radius: 20px;
+                        height: 36px;
+                        font-size: 13px;
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: border-color 0.2s;
+                        box-sizing: border-box;
+                    "
+                    onMouseEnter=${e => e.currentTarget.style.borderColor = 'var(--primary-color)'}
+                    onMouseLeave=${e => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                    title="Data di lettura"
+                    >
+                        <span style="pointer-events: none;">${vol.readDate ? (() => { const d = new Date(vol.readDate); return \`\${String(d.getDate()).padStart(2, '0')}/\${String(d.getMonth()+1).padStart(2, '0')}/\${d.getFullYear()}\`; })() : 'Data'}</span>
+                        <input 
+                            type="date" 
+                            class="volume-date-input"
+                            value=${vol.readDate ? new Date(vol.readDate).toISOString().slice(0, 10) : ''}
+                            onChange=${(e) => {
+                                let newDate = null;
+                                if (e.target.value) {
+                                    newDate = new Date(e.target.value).toISOString();
+                                }
+                                const updatedVolumes = volumes.map(v =>
+                                    v.id === vol.id ? { ...v, readDate: newDate } : v
+                                );
+                                setVolumes(updatedVolumes);
+                                onUpdate({ ...manga, volumes: updatedVolumes });
+                            }}
+                            style="
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                opacity: 0;
+                                cursor: pointer;
+                                box-sizing: border-box;
+                            "
+                            onClick=${(e) => {
+                                if (e.target.showPicker) {
+                                    try { e.target.showPicker(); } catch (err) {}
+                                }
+                            }}
+                        />
+                    </div>
                   `}
 
                   <button 
