@@ -447,9 +447,9 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                 onMouseEnter=${e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'; }}
                 onMouseLeave=${e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; }}
               >
-                <div style="display: flex; flex-direction: column; flex-shrink: 0; min-width: 50px;">
-                  <span style="font-weight: bold; font-size: 15px;">Vol. ${(vol.name || vol.number || '?')}</span>
-                  ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color);">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}</span>` : null}
+                <div style="display: flex; flex-direction: column; flex: 1; min-width: 0; margin-right: 8px;">
+                  <span style="font-weight: bold; font-size: 15px; word-break: break-word; line-height: 1.2;">Vol. ${(vol.name || vol.number || '?')}</span>
+                  ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 2px;">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}</span>` : null}
                 </div>
                 
                 <div style="display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0;">
@@ -478,12 +478,19 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                             padding: 0 4px;
                             height: 26px;
                             font-size: 10px;
-                            width: 90px;
+                            width: 82px;
+                            text-align: center;
                             cursor: pointer;
                             font-family: inherit;
                             box-sizing: border-box;
                             transition: border-color 0.2s;
+                            position: relative;
                         "
+                        onClick=${(e) => {
+                            if (e.target.showPicker) {
+                                try { e.target.showPicker(); } catch (err) {}
+                            }
+                        }}
                         onMouseEnter=${e => e.currentTarget.style.borderColor = 'var(--primary-color)'}
                         onMouseLeave=${e => e.currentTarget.style.borderColor = 'var(--border-color)'}
                         title="Data di lettura"
