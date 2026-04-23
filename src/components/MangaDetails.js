@@ -487,13 +487,13 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                         }}
                         style="
                             flex: 1;
-                            min-width: 0;
+                            min-width: 90px;
                             max-width: 140px;
                             background: rgba(0, 0, 0, 0.2);
                             border: 1px solid var(--border-color);
                             color: var(--secondary-text-color);
-                            border-radius: 8px;
-                            padding: 0 8px;
+                            border-radius: 20px;
+                            padding: 0 12px;
                             height: 36px;
                             font-size: 13px;
                             text-align: center;
@@ -543,12 +543,11 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                   <button 
                     onClick=${(e) => { e.stopPropagation(); toggleRead(vol.id); }}
                     style="
-                      flex: 1;
+                      flex: 0 1 auto;
                       min-width: 0;
-                      max-width: 120px;
                       height: 36px;
-                      padding: 0 8px; 
-                      border-radius: 10px; 
+                      padding: 0 16px; 
+                      border-radius: 20px; 
                       font-size: 12px; 
                       font-weight: 700; 
                       cursor: pointer; 
@@ -557,7 +556,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                       color: ${vol.read ? 'var(--primary-color)' : 'var(--secondary-text-color)'};
                       letter-spacing: 0.5px;
                       border: 1px solid ${vol.read ? 'var(--primary-color)' : 'var(--secondary-text-color)'};
-                      flex-shrink: 0;
+                      flex-shrink: 1;
                       white-space: nowrap;
                       text-overflow: ellipsis;
                       overflow: hidden;
