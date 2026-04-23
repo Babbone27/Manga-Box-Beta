@@ -491,7 +491,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                     onMouseLeave=${e => e.currentTarget.style.borderColor = 'var(--border-color)'}
                     title="Data di lettura"
                     >
-                        <span style="pointer-events: none;">${vol.readDate ? (() => { const d = new Date(vol.readDate); return \`\${String(d.getDate()).padStart(2, '0')}/\${String(d.getMonth()+1).padStart(2, '0')}/\${d.getFullYear()}\`; })() : 'Data'}</span>
+                        <span style="pointer-events: none;">${vol.readDate ? (() => { const d = new Date(vol.readDate); return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth()+1).padStart(2, '0')}/${d.getFullYear()}`; })() : 'Data'}</span>
                         <input 
                             type="date" 
                             class="volume-date-input"
