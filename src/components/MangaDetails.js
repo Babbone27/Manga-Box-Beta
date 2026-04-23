@@ -175,15 +175,6 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
             height: 85vh;
           }
         }
-        /* Hide native calendar arrow/chevron in volume date pickers */
-        .volume-date-input::-webkit-calendar-picker-indicator {
-          display: none !important;
-          -webkit-appearance: none;
-        }
-        .volume-date-input::-webkit-inner-spin-button,
-        .volume-date-input::-webkit-clear-button {
-          display: none;
-        }
       </style>
       <!-- Modal Card -->
       <div 

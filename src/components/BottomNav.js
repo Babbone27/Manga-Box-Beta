@@ -7,18 +7,12 @@ const BottomNav = ({ activeTab, setActiveTab }) => {
       id: 'library',
       label: 'Libreria',
       // Icons from App.js (Windows)
-      iconClosed: html`<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />`,
-      iconOpen: html`
-      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-      <path class="bookmark" d="M15 2v10l-2-2-2 2V2z" fill="currentColor" style="transform-origin: top;" />
-      `,
-      icon: html`<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />`
+      icon: html`<g class="book-top"><rect x="4" y="4" width="16" height="4.5" rx="1.5" /><path d="M7 4v4.5" opacity="0.4" /></g><g class="book-mid"><rect x="4" y="10" width="16" height="4.5" rx="1.5" /><path d="M7 10v4.5" opacity="0.4" /></g><g class="book-bot"><rect x="4" y="16" width="16" height="4.5" rx="1.5" /><path d="M7 16v4.5" opacity="0.4" /></g>`
     },
     {
       id: 'letture',
       label: 'Letture',
-      icon: html`<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>`
+      icon: html`<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />`
     },
     {
       id: 'wishlist',
