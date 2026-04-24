@@ -507,11 +507,6 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                             box-sizing: border-box;
                             transition: border-color 0.2s;
                         "
-                        onClick=${(e) => {
-                            if (e.target.showPicker) {
-                                try { e.target.showPicker(); } catch (err) {}
-                            }
-                        }}
                         onMouseEnter=${e => e.currentTarget.style.borderColor = 'var(--primary-color)'}
                         onMouseLeave=${e => e.currentTarget.style.borderColor = 'var(--border-color)'}
                         title="Data di lettura"
