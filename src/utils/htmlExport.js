@@ -1,6 +1,6 @@
 import { getTheme } from '../themes.js';
 
-export const generateHTML = (mangaList, lettureList = [], themeName, nickname) => {
+export const generateHTML = (mangaList, lettureList = [], wishlistList = [], themeName, nickname) => {
     const date = new Date().toLocaleDateString('it-IT');
     const theme = getTheme(themeName);
 
@@ -22,8 +22,14 @@ export const generateHTML = (mangaList, lettureList = [], themeName, nickname) =
         coverUrl: undefined,
         cover: undefined
     }));
+    const cleanWishlist = wishlistList.map(m => ({
+        ...m,
+        coverUrl: undefined,
+        cover: undefined
+    }));
     const escapedData = JSON.stringify(cleanData).replace(/<\/script>/g, '<\\/script>');
     const escapedLetture = JSON.stringify(cleanLetture).replace(/<\/script>/g, '<\\/script>');
+    const escapedWishlist = JSON.stringify(cleanWishlist).replace(/<\/script>/g, '<\\/script>');
 
     // Theme CSS variables for use in client-side JS
     const themeColors = {
@@ -437,6 +443,7 @@ export const generateHTML = (mangaList, lettureList = [], themeName, nickname) =
         // EMBEDDED DATA
         const RAW_DATA = ${escapedData};
         const RAW_LETTURE = ${escapedLetture};
+        const RAW_WISHLIST = ${escapedWishlist};
         const COLORS = ${JSON.stringify(themeColors)};
 
         // STATE

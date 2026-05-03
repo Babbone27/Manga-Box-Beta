@@ -236,9 +236,10 @@ export default function Info({ onRefresh, settings, onSettingsChange, onOpenHist
       const allManga = await getAllManga();
       const libraryList = allManga.filter(m => !m.collection || m.collection === 'library');
       const lettureList = allManga.filter(m => m.collection === 'letture');
+      const wishlistList = allManga.filter(m => m.collection === 'wishlist');
       
       const { generateHTML } = await import('../utils/htmlExport.js');
-      generateHTML(libraryList, lettureList, settings.theme, settings.nickname);
+      generateHTML(libraryList, lettureList, wishlistList, settings.theme, settings.nickname);
     } catch (err) {
       console.error('Errore export HTML:', err);
       showModal('Errore', 'Impossibile creare il backup HTML.');
@@ -297,24 +298,33 @@ export default function Info({ onRefresh, settings, onSettingsChange, onOpenHist
       try {
         const text = event.target.result;
         // Regex to find the embedded data
-        const match = text.match(/const RAW_DATA = (\[[\s\S]*?\]);/);
+        const matchData = text.match(/const RAW_DATA = (\[[\s\S]*?\]);/);
+        const matchLetture = text.match(/const RAW_LETTURE = (\[[\s\S]*?\]);/);
+        const matchWishlist = text.match(/const RAW_WISHLIST = (\[[\s\S]*?\]);/);
 
-        if (match && match[1]) {
-          const importedData = JSON.parse(match[1]);
-          if (Array.isArray(importedData)) {
-            showModal(
-              'Importa da HTML',
-              `Trovati ${importedData.length} manga nel file HTML. Vuoi importarli nel database?`,
-              'confirm',
-              async () => {
-                const { bulkAddManga } = await import('../db.js');
-                await bulkAddManga(importedData);
-                showModal('Successo', 'Importazione completata!', 'info', () => window.location.reload());
-              }
-            );
-          } else {
-            showModal('Errore', 'Dati validi non trovati nel file HTML.');
-          }
+        let importedData = [];
+
+        if (matchData && matchData[1]) {
+          importedData = importedData.concat(JSON.parse(matchData[1]));
+        }
+        if (matchLetture && matchLetture[1]) {
+          importedData = importedData.concat(JSON.parse(matchLetture[1]));
+        }
+        if (matchWishlist && matchWishlist[1]) {
+          importedData = importedData.concat(JSON.parse(matchWishlist[1]));
+        }
+
+        if (importedData.length > 0) {
+          showModal(
+            'Importa da HTML',
+            `Trovati ${importedData.length} manga nel file HTML. Vuoi importarli nel database?`,
+            'confirm',
+            async () => {
+              const { bulkAddManga } = await import('../db.js');
+              await bulkAddManga(importedData);
+              showModal('Successo', 'Importazione completata!', 'info', () => window.location.reload());
+            }
+          );
         } else {
           showModal('Errore', 'Impossibile trovare i dati di backup in questo file HTML.');
         }
