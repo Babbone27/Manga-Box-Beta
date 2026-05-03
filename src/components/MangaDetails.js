@@ -478,8 +478,8 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                   ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 2px;">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}</span>` : null}
                 </div>
 
-                <!-- Actions on the right -->
-                <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                <!-- Actions row - always full width, LETTO pinned right -->
+                <div style="display: flex; align-items: center; gap: 6px; width: 100%;">
                   
                   ${vol.read && html`
                     <input 
@@ -518,6 +518,9 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                         title="Data di lettura"
                     />
                   `}
+
+                  <!-- Spacer pushes check+LETTO to the right -->
+                  <div style="flex: 1;"></div>
 
                   <button 
                     title="Segna come letto fino a qui"
