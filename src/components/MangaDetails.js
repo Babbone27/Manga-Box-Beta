@@ -5,7 +5,7 @@ import Modal from './Modal.js';
 
 export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
   const [volumes, setVolumes] = useState(manga.volumes || []);
-  const [newVolume, setNewVolume] = useState({ name: '', price: '', read: false });
+  const [newVolume, setNewVolume] = useState({ name: '', price: '', read: false, dateAdded: new Date().toISOString().slice(0, 10) });
   const [isAddingVolume, setIsAddingVolume] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [modalState, setModalState] = useState({
@@ -75,7 +75,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
               price: newVolume.price,
               read: newVolume.read,
               readDate: newVolume.read ? new Date().toISOString() : null,
-              dateAdded: new Date().toISOString()
+              dateAdded: newVolume.dateAdded ? new Date(newVolume.dateAdded).toISOString() : new Date().toISOString()
             });
           }
         }
@@ -87,7 +87,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
           price: newVolume.price,
           read: newVolume.read,
           readDate: newVolume.read ? new Date().toISOString() : null,
-          dateAdded: new Date().toISOString()
+          dateAdded: newVolume.dateAdded ? new Date(newVolume.dateAdded).toISOString() : new Date().toISOString()
         });
       }
     }
@@ -96,7 +96,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
       const updatedVolumes = [...volumes, ...volumesToAdd];
       setVolumes(updatedVolumes);
       onUpdate({ ...manga, volumes: updatedVolumes });
-      setNewVolume({ name: '', price: '', read: false });
+      setNewVolume({ name: '', price: '', read: false, dateAdded: new Date().toISOString().slice(0, 10) });
       setIsAddingVolume(false);
     }
   };
@@ -407,6 +407,19 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                       }
                     </style>
                   </div>
+                  <div style="position: relative;">
+                    <label style="font-size: 11px; color: var(--secondary-text-color); margin-bottom: 4px; display: block;">Acquistato il</label>
+                    <input 
+                      type="date" 
+                      name="volumeDateAdded"
+                      id="volumeDateAdded"
+                      value=${newVolume.dateAdded}
+                      onInput=${(e) => setNewVolume({ ...newVolume, dateAdded: e.target.value })}
+                      style="width: 100%; padding: 12px; background: var(--background-color); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 12px; outline: none; transition: all 0.2s; font-family: inherit; box-sizing: border-box;"
+                      onFocus=${e => { e.target.style.borderColor = 'var(--primary-color)'; }}
+                      onBlur=${e => { e.target.style.borderColor = 'var(--border-color)'; }}
+                    />
+                  </div>
                 </div>
                 <div style="display: flex; gap: 12px;">
                   <button 
@@ -475,7 +488,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                 <!-- Volume info -->
                 <div style="display: flex; flex-direction: column; flex: 1; min-width: 60px;">
                   <span style="font-weight: bold; font-size: 15px; word-break: break-word; line-height: 1.2;">Vol. ${(vol.name || vol.number || '?')}</span>
-                  ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 2px;">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}</span>` : null}
+                  ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 2px;">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}${vol.dateAdded ? html` - ${new Date(vol.dateAdded).toLocaleDateString('it-IT')}` : ''}</span>` : html`${vol.dateAdded ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 2px;">${new Date(vol.dateAdded).toLocaleDateString('it-IT')}</span>` : null}`}
                 </div>
 
                 <!-- Actions row - always full width, LETTO pinned right -->
