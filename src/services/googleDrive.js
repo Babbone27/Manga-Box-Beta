@@ -19,7 +19,6 @@ const loadScript = (src) => {
         }
         const script = document.createElement('script');
         script.src = src;
-        script.crossOrigin = 'anonymous';
         script.onload = () => {
             script.setAttribute('data-loaded', 'true');
             resolve();
