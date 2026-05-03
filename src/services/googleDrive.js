@@ -10,45 +10,63 @@ let gisInited = false;
 // Dynamic Script Loader
 const loadScript = (src) => {
     return new Promise((resolve, reject) => {
-        if (document.querySelector(`script[src="${src}"]`)) return resolve();
+        const existing = document.querySelector(`script[src="${src}"]`);
+        if (existing) {
+            if (existing.getAttribute('data-loaded') === 'true') return resolve();
+            existing.addEventListener('load', resolve);
+            existing.addEventListener('error', reject);
+            return;
+        }
         const script = document.createElement('script');
         script.src = src;
         script.crossOrigin = 'anonymous';
-        script.onload = resolve;
+        script.onload = () => {
+            script.setAttribute('data-loaded', 'true');
+            resolve();
+        };
         script.onerror = reject;
         document.body.appendChild(script);
     });
 };
 
-export const initGoogleDrive = async () => {
-    try {
-        await Promise.all([
-            loadScript('https://apis.google.com/js/api.js'),
-            loadScript('https://accounts.google.com/gsi/client')
-        ]);
+let initPromise = null;
 
-        await new Promise((resolve) => gapi.load('client', resolve));
-        await gapi.client.init({
-            discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-        });
-        gapiInited = true;
+export const initGoogleDrive = () => {
+    if (initPromise) return initPromise;
+    
+    initPromise = (async () => {
+        try {
+            await Promise.all([
+                loadScript('https://apis.google.com/js/api.js'),
+                loadScript('https://accounts.google.com/gsi/client')
+            ]);
 
-        tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: CLIENT_ID,
-            scope: SCOPES,
-            callback: '', // defined at request time
-        });
-        gisInited = true;
-        console.log('Google Drive API Initialized');
-        return true;
-    } catch (error) {
-        console.error('Error initializing Google Drive:', error);
-        return false;
-    }
+            await new Promise((resolve) => gapi.load('client', resolve));
+            await gapi.client.init({
+                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+            });
+            gapiInited = true;
+
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPES,
+                callback: '', // defined at request time
+            });
+            gisInited = true;
+            console.log('Google Drive API Initialized');
+            return true;
+        } catch (error) {
+            console.error('Error initializing Google Drive:', error);
+            initPromise = null;
+            return false;
+        }
+    })();
+    
+    return initPromise;
 };
 
 export const restoreSession = async () => {
-    if (!gapiInited) await initGoogleDrive();
+    if (!gapiInited || !gisInited) await initGoogleDrive();
     const stored = localStorage.getItem('gdrive_token');
     if (stored) {
         try {
@@ -191,8 +209,12 @@ export const checkCloudBackupNewer = async () => {
 // --- Business Logic ---
 
 export const signIn = async () => {
-    if (!gapiInited) await initGoogleDrive();
+    if (!gapiInited || !gisInited) await initGoogleDrive();
+    
     return new Promise((resolve, reject) => {
+        if (!tokenClient) {
+            return reject(new Error('Google Auth not initialized'));
+        }
         tokenClient.callback = (resp) => {
             if (resp.error) return reject(resp);
             resp.expires_at = Date.now() + (resp.expires_in * 1000);
