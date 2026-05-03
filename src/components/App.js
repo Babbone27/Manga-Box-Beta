@@ -399,7 +399,11 @@ export default function App() {
       }
 
       if (state && state.view) {
-        setView(state.view);
+        if (state.view === 'details' && !selectedManga) {
+            setView('main');
+        } else {
+            setView(state.view);
+        }
         if (state.view === 'main') {
           setSelectedManga(null);
         }
@@ -414,7 +418,7 @@ export default function App() {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [view, showFilters]);
+  }, [view, showFilters, selectedManga]);
 
   const updateSettings = (newSettings) => {
     setSettings(newSettings);
