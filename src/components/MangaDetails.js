@@ -176,7 +176,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
           }
         }
         
-        /* Hide calendar icon on date inputs */
+        /* Hide calendar icon and normalize date inputs cross-browser */
         .volume-date-input::-webkit-calendar-picker-indicator {
             display: none !important;
             -webkit-appearance: none;
@@ -185,10 +185,15 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
         .volume-date-input::-webkit-clear-button {
             display: none !important;
         }
+        .volume-date-input::-webkit-datetime-edit {
+            text-align: center;
+            width: 100%;
+        }
         .volume-date-input {
             -webkit-appearance: none;
-            -moz-appearance: none;
+            -moz-appearance: textfield;
             appearance: none;
+            text-align: center;
         }
       </style>
       <!-- Modal Card -->
@@ -491,14 +496,13 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                             onUpdate({ ...manga, volumes: updatedVolumes });
                         }}
                         style="
-                            flex: 1;
-                            min-width: 110px;
-                            max-width: 180px;
+                            flex: 0 1 auto;
+                            width: 130px;
                             background: rgba(0, 0, 0, 0.2);
                             border: 1px solid var(--border-color);
                             color: var(--secondary-text-color);
                             border-radius: 20px;
-                            padding: 0 4px;
+                            padding: 0 10px;
                             height: 36px;
                             font-size: 13px;
                             text-align: center;
