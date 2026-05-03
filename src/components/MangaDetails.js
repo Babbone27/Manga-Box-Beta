@@ -467,17 +467,19 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                 onMouseEnter=${e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'; }}
                 onMouseLeave=${e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; }}
               >
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex: 1; min-width: 120px; width: 100%;">
-                  <div style="display: flex; flex-direction: column; min-width: 0;">
-                    <span style="font-weight: bold; font-size: 15px; word-break: break-word; line-height: 1.2;">Vol. ${(vol.name || vol.number || '?')}</span>
-                    ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 4px;">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}</span>` : null}
-                  </div>
-                  <button onClick=${() => deleteVolume(vol.id)} style="background: none; border: none; color: var(--error-color); cursor: pointer; opacity: 0.6; transition: opacity 0.2s; padding: 4px; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; margin-top: -4px; margin-right: -4px;" onMouseEnter=${e => e.target.style.opacity = '1'} onMouseLeave=${e => e.target.style.opacity = '0.6'} title="Elimina volume">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 96 960 960" width="20" fill="currentColor"><path d="M280 936q-33 0-56.5-23.5T200 856V336h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680 936H280Zm400-600H280v520h400V336ZM360 776h80V396h-80v380Zm160 0h80V396h-80v380ZM280 336v520-520Z"/></svg>
-                  </button>
+                <!-- Delete button on the left -->
+                <button onClick=${() => deleteVolume(vol.id)} style="background: none; border: none; color: var(--error-color); cursor: pointer; opacity: 0.6; transition: opacity 0.2s; padding: 4px; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0;" onMouseEnter=${e => e.currentTarget.style.opacity = '1'} onMouseLeave=${e => e.currentTarget.style.opacity = '0.6'} title="Elimina volume">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 96 960 960" width="18" fill="currentColor"><path d="M280 936q-33 0-56.5-23.5T200 856V336h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680 936H280Zm400-600H280v520h400V336ZM360 776h80V396h-80v380Zm160 0h80V396h-80v380ZM280 336v520-520Z"/></svg>
+                </button>
+
+                <!-- Volume info -->
+                <div style="display: flex; flex-direction: column; flex: 1; min-width: 60px;">
+                  <span style="font-weight: bold; font-size: 15px; word-break: break-word; line-height: 1.2;">Vol. ${(vol.name || vol.number || '?')}</span>
+                  ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 2px;">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}</span>` : null}
                 </div>
-                
-                <div style="display: flex; align-items: center; gap: 6px; flex: 2; flex-wrap: nowrap; justify-content: flex-end; min-width: 220px; width: 100%;">
+
+                <!-- Actions on the right -->
+                <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
                   
                   ${vol.read && html`
                     <input 
@@ -496,7 +498,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                             onUpdate({ ...manga, volumes: updatedVolumes });
                         }}
                         style="
-                            flex: 0 1 auto;
+                            flex: 0 0 auto;
                             width: 130px;
                             background: rgba(0, 0, 0, 0.2);
                             border: 1px solid var(--border-color);
@@ -544,8 +546,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                   <button 
                     onClick=${(e) => { e.stopPropagation(); toggleRead(vol.id); }}
                     style="
-                      flex: 0 1 auto;
-                      min-width: 0;
+                      flex: 0 0 auto;
                       height: 36px;
                       padding: 0 16px; 
                       border-radius: 20px; 
@@ -557,10 +558,7 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
                       color: ${vol.read ? 'var(--primary-color)' : 'var(--secondary-text-color)'};
                       letter-spacing: 0.5px;
                       border: 1px solid ${vol.read ? 'var(--primary-color)' : 'var(--secondary-text-color)'};
-                      flex-shrink: 1;
                       white-space: nowrap;
-                      text-overflow: ellipsis;
-                      overflow: hidden;
                       display: flex;
                       align-items: center;
                       justify-content: center;
