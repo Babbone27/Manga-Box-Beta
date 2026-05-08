@@ -347,14 +347,17 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
               onMouseLeave=${e => { e.target.style.background = 'rgba(125, 207, 255, 0.1)'; e.target.style.color = 'var(--primary-color)'; }}
             >
               <svg 
-                class="icon-plus-minus ${isAddingVolume ? 'rotated' : ''}"
                 xmlns="http://www.w3.org/2000/svg" 
                 height="20" 
                 viewBox="0 96 960 960" 
                 width="20" 
                 fill="currentColor"
+                style="transition: transform 0.25s ease;"
               >
-                <path d="M440 856V616H200v-80h240V296h80v240h240v80H520v240h-80z"/>
+                ${isAddingVolume
+                  ? html`<path d="M200 616v-80h560v80H200z"/>`
+                  : html`<path d="M440 856V616H200v-80h240V296h80v240h240v80H520v240h-80z"/>`
+                }
               </svg>
             </button>
           </div>
@@ -476,22 +479,24 @@ export default function MangaDetails({ manga, onEdit, onBack, onUpdate }) {
               <div 
                 key=${vol.id}
                 class="volume-item"
-                style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; transition: all 0.2s ease; border: 1px solid var(--border-color); gap: 12px;"
+                style="display: flex; flex-direction: column; gap: 8px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; transition: all 0.2s ease; border: 1px solid var(--border-color);"
                 onMouseEnter=${e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'; }}
                 onMouseLeave=${e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; }}
               >
-                <!-- Delete button on the left -->
-                <button onClick=${() => deleteVolume(vol.id)} style="background: none; border: none; color: var(--error-color); cursor: pointer; opacity: 0.6; transition: opacity 0.2s; padding: 4px; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0;" onMouseEnter=${e => e.currentTarget.style.opacity = '1'} onMouseLeave=${e => e.currentTarget.style.opacity = '0.6'} title="Elimina volume">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 96 960 960" width="18" fill="currentColor"><path d="M280 936q-33 0-56.5-23.5T200 856V336h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680 936H280Zm400-600H280v520h400V336ZM360 776h80V396h-80v380Zm160 0h80V396h-80v380ZM280 336v520-520Z"/></svg>
-                </button>
-
-                <!-- Volume info -->
-                <div style="display: flex; flex-direction: column; flex: 1; min-width: 60px;">
-                  <span style="font-weight: bold; font-size: 15px; word-break: break-word; line-height: 1.2;">Vol. ${(vol.name || vol.number || '?')}</span>
-                  ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 2px;">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}${vol.dateAdded ? html` - ${new Date(vol.dateAdded).toLocaleDateString('it-IT')}` : ''}</span>` : html`${vol.dateAdded ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 2px;">${new Date(vol.dateAdded).toLocaleDateString('it-IT')}</span>` : null}`}
+                <!-- Top row: volume info + delete button -->
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                  <!-- Volume info -->
+                  <div style="display: flex; flex-direction: column; flex: 1; min-width: 0;">
+                    <span style="font-weight: bold; font-size: 15px; word-break: break-word; line-height: 1.2;">Vol. ${(vol.name || vol.number || '?')}</span>
+                    ${vol.price ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 2px;">€${'\u00A0'}${parseFloat(vol.price).toFixed(2)}${vol.dateAdded ? html` - ${new Date(vol.dateAdded).toLocaleDateString('it-IT')}` : ''}</span>` : html`${vol.dateAdded ? html`<span style="font-size: 11px; color: var(--secondary-text-color); margin-top: 2px;">${new Date(vol.dateAdded).toLocaleDateString('it-IT')}</span>` : null}`}
+                  </div>
+                  <!-- Delete button pinned top-right -->
+                  <button onClick=${() => deleteVolume(vol.id)} style="background: none; border: none; color: var(--error-color); cursor: pointer; opacity: 0.5; transition: opacity 0.2s; padding: 4px; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0;" onMouseEnter=${e => e.currentTarget.style.opacity = '1'} onMouseLeave=${e => e.currentTarget.style.opacity = '0.5'} title="Elimina volume">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 96 960 960" width="18" fill="currentColor"><path d="M280 936q-33 0-56.5-23.5T200 856V336h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680 936H280Zm400-600H280v520h400V336ZM360 776h80V396h-80v380Zm160 0h80V396h-80v380ZM280 336v520-520Z"/></svg>
+                  </button>
                 </div>
 
-                <!-- Actions row - always full width, LETTO pinned right -->
+                <!-- Bottom row: actions -->
                 <div style="display: flex; align-items: center; gap: 6px; width: 100%;">
                   
                   ${vol.read && html`
