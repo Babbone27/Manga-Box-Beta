@@ -696,7 +696,7 @@ export default function Info({ onRefresh, settings, onSettingsChange, onOpenHist
 
       <!-- INFO APP -->
       <div style="text-align: center; margin-top: 48px; color: var(--secondary-text-color); font-size: 12px;">
-        <div>Manga Box v1.5</div>
+        <div>Manga Box v1.6 Beta</div>
         <div style="margin-top: 8px;">
             <span onClick=${() => setShowChangelog(true)} style="cursor: pointer; text-decoration: underline;">Changelog</span>
         </div>
@@ -746,7 +746,7 @@ export default function Info({ onRefresh, settings, onSettingsChange, onOpenHist
                </div>
                <div class="flex-col">
                   <div style="font-size: 28px; font-weight: bold; color: var(--text-color); line-height: 1; letter-spacing: -0.5px;">Manga<span style="font-weight: 300;">Box</span></div>
-                  <div style="font-size: 16px; color: var(--primary-color); font-weight: 600; margin-top: 6px;">v1.5 Stable</div>
+                  <div style="font-size: 16px; color: var(--primary-color); font-weight: 600; margin-top: 6px;">v1.6 Beta</div>
                   <div style="font-size: 13px; color: var(--secondary-text-color); margin-top: 8px; opacity: 0.8;">Registro delle modifiche e novità</div>
                </div>
 
@@ -770,7 +770,21 @@ export default function Info({ onRefresh, settings, onSettingsChange, onOpenHist
             <!-- Content Area -->
             <div style="overflow-y: auto; flex: 1; padding: 24px; background: rgba(0,0,0,0.1);">
                 <div style="white-space: pre-line; color: var(--text-color); font-size: 14px; line-height: 1.7; font-family: 'Inter', system-ui, sans-serif;">
-                  ${`v1.5 (13/04/2026)
+                  ${`v1.6 (08/05/2026)
+
+Navigazione Nativa: introdotto il supporto per il tasto "Indietro" su smartphone e rimossa la navigazione tramite swipe tra le tab per prevenire cambi di pagina accidentali.
+
+Aggiunta Rapida: ora è possibile creare e inserire nuovi manga o volumi direttamente dalla sezione "Letture".
+
+Data di Acquisto: aggiunto un nuovo campo per registrare o modificare la data in cui è stato comprato un singolo volume.
+
+Gestione Backup: migliorata l'esportazione HTML per includere anche le liste "Wishlist" e "Letture".
+
+Interfaccia Volumi: la scheda del singolo volume ha ora un layout più stabile.
+
+Autenticazione Google Drive: risolti i conflitti dei token, gli errori di caricamento e i problemi legati all'accesso per garantire un login cloud più stabile.
+
+v1.5 (13/04/2026)
 
 Nuova Tab "Letture": sezione dedicata ai fumetti letti ma non posseduti (come volumi venduti o scan). Queste letture vengono conteggiate nelle statistiche generali senza però influenzare il numero totale di volumi o il valore economico della collezione.
 
