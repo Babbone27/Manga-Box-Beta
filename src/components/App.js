@@ -818,7 +818,7 @@ export default function App() {
         ${renderFilterPanel()}
 
 
-        ${(activeTab === 'library' || activeTab === 'wishlist') && view === 'main' ? html`
+        ${(activeTab === 'library' || activeTab === 'wishlist' || activeTab === 'letture') && view === 'main' ? html`
         <button class="fab" onClick=${() => { setView('create'); history.pushState({ view: 'create' }, ''); }}>
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24" fill="currentColor">
             <path d="M440 856V616H200v-80h240V296h80v240h240v80H520v240h-80z"/>
