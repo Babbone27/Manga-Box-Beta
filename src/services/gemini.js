@@ -9,17 +9,27 @@ export async function fetchMangaDetails(title) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ 
+        model: "gemini-2.5-flash",
+        tools: [{ googleSearch: {} }]
+    });
 
-    const prompt = `Il manga "${title}" se è edito in italia, indicami i seguenti dati in formato JSON valido:
+    const prompt = `Effettua una ricerca sul web per il manga "${title}", utilizzando come fonte principale e prioritaria il sito animeclick.it.
+    In base a quanto riportato sulla scheda del manga su animeclick.it, estrapola i dati seguendo ESATTAMENTE queste regole:
+    - Autore: estrapola dai campi "Storia" e "Disegni". Se lo stesso nome è in entrambi, scrivilo una sola volta. Se sono due persone diverse, inseriscile entrambe separate da una virgola.
+    - Editore: estrapola dal campo "Disponibilità". Tale campo spesso contiene l'editore seguito da una nota tra parentesi (es. "J-Pop (acquista su Amazon)"). Rimuovi SEMPRE il contenuto tra parentesi e le parentesi stesse, restituendo solo il nome pulito dell'editore (es. "J-Pop").
+    - Target: estrapola dal campo "Categoria" (es. Shonen, Seinen, Shojo, Josei, Kodomo).
+    - Stato: estrapola dal campo "Stato in Italia".
+    
+    Restituisci i dati nel seguente formato JSON valido:
     {
-        "description": "Trama (in italiano)",
-        "author": "Nome Cognome",
-        "publisher": "Editore (in italiano)",
-        "target": "Target (Shonen, Seinen, Shojo, Josei, Kodomo)",
-        "status": "Stato (Serie in corso, Serie completa, Volume unico)"
+        "description": "Trama (in italiano, possibilmente quella riportata su animeclick.it)",
+        "author": "Autore/i (segui la regola di Storia/Disegni)",
+        "publisher": "Editore (pulito dalle parentesi, segui la regola di Disponibilità)",
+        "target": "Target (dal campo Categoria)",
+        "status": "Stato in Italia"
     }
-    Se non è edito in Italia, cerca comunque le informazioni più accurate possibili traducendole in italiano.
+    Se non è edito in Italia o non esiste la scheda su animeclick.it, cerca comunque le informazioni più accurate possibili sul web traducendole in italiano.
     Rispondi SOLO con il JSON, senza markdown o altro testo.`;
 
     try {
