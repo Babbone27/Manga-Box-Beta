@@ -383,6 +383,13 @@ export default function App() {
     applyTheme(loadedSettings.theme);
   }, []);
 
+  // Safeguard: if view is 'details' but no manga is selected, revert to 'main'
+  useEffect(() => {
+    if (view === 'details' && !selectedManga) {
+      setView('main');
+    }
+  }, [view, selectedManga]);
+
   useEffect(() => {
     loadLibrary();
   }, []);
@@ -528,10 +535,15 @@ export default function App() {
     if (mainContentRef.current) {
       scrollPositionRef.current = mainContentRef.current.scrollTop;
     }
+    
+    // Push history state only if we're not already in details view
+    // This prevents double-pushing if the user double-clicks a manga card
+    if (view !== 'details') {
+      history.pushState({ view: 'details' }, '');
+    }
+    
     setSelectedManga(manga);
     setView('details');
-    // Push history state so back gesture returns to list
-    history.pushState({ view: 'details' }, '');
   };
 
   const libraryList = useMemo(() => mangaList.filter(m => !m.collection || m.collection === 'library'), [mangaList]);
