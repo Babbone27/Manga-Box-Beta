@@ -451,7 +451,7 @@ export default function App() {
           case '3': e.preventDefault(); setActiveTab('wishlist'); setView('main'); break;
           case '4': e.preventDefault(); setActiveTab('updates'); setView('main'); break;
           case '5': e.preventDefault(); setActiveTab('info'); setView('main'); break;
-          case 'n': case 'N': e.preventDefault(); setView('create'); break;
+          case 'n': case 'N': e.preventDefault(); setView('create'); history.pushState({ view: 'create' }, ''); break;
           case 'm': case 'M': {
             e.preventDefault();
             const modes = ['grid', 'list', 'table'];
@@ -493,6 +493,12 @@ export default function App() {
       await addManga(formData);
       setView('main');
     }
+    
+    // Pop the pushed state so it doesn't stay in history
+    if (history.state && (history.state.view === 'create' || history.state.view === 'edit')) {
+      history.back();
+    }
+    
     await loadLibrary();
   };
 
@@ -562,6 +568,13 @@ export default function App() {
     await deleteManga(id);
     setView('main');
     setSelectedManga(null);
+    
+    if (history.state && history.state.view === 'edit') {
+      history.go(-2); // Pop both 'edit' and 'details' to return to 'main'
+    } else if (history.state && history.state.view) {
+      history.back();
+    }
+    
     await loadLibrary();
   };
 
