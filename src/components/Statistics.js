@@ -160,7 +160,7 @@ const ChartCard = ({ title, canvasRef, wide, scrollDirection, itemCount = 0 }) =
 `;
 };
 
-export default function Statistics({ mangaList = [], lettureList = [], settings }) {
+export default function Statistics({ mangaList = [], lettureList = [], wishlistList = [], settings }) {
   const statusChartRef = useRef(null);
   const targetSeriesChartRef = useRef(null);
   const targetVolumeChartRef = useRef(null);
@@ -230,6 +230,7 @@ export default function Statistics({ mangaList = [], lettureList = [], settings 
     'Volume unico': '#FFCA28', // Amber 400
     'Pausa': '#FFA726', // Orange 400
     'Cancellata': '#EF5350', // Red 400
+    'Altro': '#AB47BC', // Purple 400
     'Sconosciuto': '#BDBDBD' // Grey 400
   };
 
@@ -740,7 +741,7 @@ export default function Statistics({ mangaList = [], lettureList = [], settings 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <h2 class="view-title" style="margin: 0;">${settings?.nickname ? `Statistiche di ${settings.nickname}` : 'Statistiche Libreria'}</h2>
         <button 
-          onClick=${() => generateHTML(mangaList, lettureList, settings?.theme, settings?.nickname)}
+          onClick=${() => generateHTML(mangaList, lettureList, wishlistList, settings?.theme, settings?.nickname)}
           style="
             background: var(--surface-color); 
             color: var(--primary-color); 

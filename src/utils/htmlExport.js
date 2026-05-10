@@ -458,7 +458,7 @@ export const generateHTML = (mangaList, lettureList = [], wishlistList = [], the
         };
         const PALETTES = {
             publisher: {'Planet Manga': '#D32F2F', 'Star Comics': '#1976D2', 'J-pop': '#FBC02D', 'Panini Comics': '#D32F2F', 'Goen': '#7B1FA2', 'Dynit': '#00796B', 'Magic Press': '#E64A19', 'FlashBook': '#388E3C', 'Bao Publishing': '#5D4037', 'Coconino Press': '#F57C00', 'Sconosciuto': '#616161'},
-            status: {'Serie in corso': '#66BB6A', 'Serie completa': '#42A5F5', 'Volume unico': '#FFCA28', 'Pausa': '#FFA726', 'Cancellata': '#EF5350', 'Sconosciuto': '#BDBDBD'},
+            status: {'Serie in corso': '#66BB6A', 'Serie completa': '#42A5F5', 'Volume unico': '#FFCA28', 'Pausa': '#FFA726', 'Cancellata': '#EF5350', 'Altro': '#AB47BC', 'Sconosciuto': '#BDBDBD'},
             target: {'Seinen': '#7E57C2', 'Shonen': '#FF7043', 'Shojo': '#F06292', 'Josei': '#26A69A', 'Kodomo': '#D4E157', 'Altro': '#78909C', 'Sconosciuto': '#BDBDBD'}
         };
         function getPublisherColor(name) { return PALETTES.publisher[name] || '#90A4AE'; }

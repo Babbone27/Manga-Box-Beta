@@ -140,8 +140,9 @@ const handleExport = async () => {
         const manga = await getAllManga();
         const libraryList = manga.filter(m => !m.collection || m.collection === 'library');
         const lettureList = manga.filter(m => m.collection === 'letture');
+        const wishlistList = manga.filter(m => m.collection === 'wishlist');
         const settings = getSettings();
-        generateHTML(libraryList, lettureList, settings.theme, settings.nickname || '');
+        generateHTML(libraryList, lettureList, wishlistList, settings.theme, settings.nickname || '');
         statusEl.textContent = 'Export completato!';
         setTimeout(() => {
             statusEl.textContent = originalText;

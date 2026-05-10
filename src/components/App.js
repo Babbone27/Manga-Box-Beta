@@ -224,8 +224,8 @@ const FilterPanel = ({ filters, setFilters, sortOrder, setSortOrder, onClose }) 
     setTimeout(onClose, 280); // Match animation duration
   };
 
-  const statusOptions = ['Serie in corso', 'Serie completa', 'Volume unico'];
-  const targetOptions = ['Shonen', 'Seinen', 'Shojo', 'Josei'];
+  const statusOptions = ['Serie in corso', 'Serie completa', 'Volume unico', 'Altro'];
+  const targetOptions = ['Shonen', 'Seinen', 'Shojo', 'Josei', 'Altro'];
   const sortOptions = [
     { value: 'title_asc', label: 'A-Z', icon: '↑' },
     { value: 'title_desc', label: 'Z-A', icon: '↓' },
@@ -593,7 +593,7 @@ export default function App() {
       `;
         break;
       case 'updates':
-        content = html`<${Statistics} mangaList=${libraryList} lettureList=${lettureList} settings=${settings} />`;
+        content = html`<${Statistics} mangaList=${libraryList} lettureList=${lettureList} wishlistList=${wishlistList} settings=${settings} />`;
         break;
       case 'info':
         content = html`<${Info} onRefresh=${loadLibrary} settings=${settings} onSettingsChange=${updateSettings} onOpenHistory=${() => { setView('history'); history.pushState({ view: 'history' }, ''); }} />`;

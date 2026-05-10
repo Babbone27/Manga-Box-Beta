@@ -453,7 +453,7 @@ export default function MangaForm({ manga, onSave, onCancel, onDelete, initialCo
                     tabIndex="0"
                     onClick=${() => setOpenDropdown(openDropdown === 'status' ? null : 'status')}
                     onKeyDown=${(e) => {
-                      const options = ['Serie in corso', 'Serie completa', 'Volume unico'];
+                      const options = ['Serie in corso', 'Serie completa', 'Volume unico', 'Altro'];
                       if (e.key === 'ArrowDown') {
                         e.preventDefault();
                         const idx = options.indexOf(formData.status);
@@ -479,7 +479,7 @@ export default function MangaForm({ manga, onSave, onCancel, onDelete, initialCo
                   </div>
                   ${openDropdown === 'status' && html`
                     <div class="custom-select-options">
-                      ${['Serie in corso', 'Serie completa', 'Volume unico'].map(opt => html`
+                      ${['Serie in corso', 'Serie completa', 'Volume unico', 'Altro'].map(opt => html`
                         <div 
                           class="custom-select-option ${formData.status === opt ? 'selected' : ''}"
                           onClick=${() => { setFormData({ ...formData, status: opt }); setOpenDropdown(null); }}
@@ -500,7 +500,7 @@ export default function MangaForm({ manga, onSave, onCancel, onDelete, initialCo
                     tabIndex="0"
                     onClick=${() => setOpenDropdown(openDropdown === 'target' ? null : 'target')}
                     onKeyDown=${(e) => {
-                      const options = ['Shonen', 'Seinen', 'Shojo', 'Josei'];
+                      const options = ['Shonen', 'Seinen', 'Shojo', 'Josei', 'Altro'];
                       if (e.key === 'ArrowDown') {
                         e.preventDefault();
                         const idx = options.indexOf(formData.target);
@@ -526,7 +526,7 @@ export default function MangaForm({ manga, onSave, onCancel, onDelete, initialCo
                   </div>
                   ${openDropdown === 'target' && html`
                     <div class="custom-select-options">
-                      ${['Shonen', 'Seinen', 'Shojo', 'Josei'].map(opt => html`
+                      ${['Shonen', 'Seinen', 'Shojo', 'Josei', 'Altro'].map(opt => html`
                         <div 
                           class="custom-select-option ${formData.target === opt ? 'selected' : ''}"
                           onClick=${() => { setFormData({ ...formData, target: opt }); setOpenDropdown(null); }}

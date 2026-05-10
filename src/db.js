@@ -273,6 +273,38 @@ export const pushToCloud = async () => {
     return await uploadAllToCloud(mangaList);
 };
 
+export const restoreCoversLocal = async (mangaList) => {
+    const db = await initDB();
+    const tx = db.transaction('manga', 'readwrite');
+    const store = tx.objectStore('manga');
+    
+    const allLocal = await store.getAll();
+    const localTitleMap = new Map();
+    allLocal.forEach(m => {
+        if (m.title) localTitleMap.set(m.title.toLowerCase().trim(), m);
+    });
+
+    let count = 0;
+    for (const backupManga of mangaList) {
+        if (!backupManga.coverUrl) continue;
+        
+        const titleNorm = backupManga.title ? backupManga.title.toLowerCase().trim() : '';
+        let existingManga = await store.get(backupManga.id);
+        
+        if (!existingManga && titleNorm) {
+            existingManga = localTitleMap.get(titleNorm);
+        }
+
+        if (existingManga) {
+            existingManga.coverUrl = backupManga.coverUrl;
+            await store.put(existingManga);
+            count++;
+        }
+    }
+    await tx.done;
+    return count;
+};
+
 export const wipeAndUploadToCloud = async () => {
     const { deleteAllRemoteManga } = await import('./services/googleDrive.js');
 

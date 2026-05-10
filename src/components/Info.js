@@ -259,6 +259,43 @@ export default function Info({ onRefresh, settings, onSettingsChange, onOpenHist
     }
   };
 
+  const handleImportCovers = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith('.json')) {
+      showModal('Errore', 'Le copertine possono essere ripristinate solo da un backup .json');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const importedData = JSON.parse(event.target.result);
+        if (Array.isArray(importedData)) {
+          showModal(
+            'Ripristina Copertine',
+            `Trovati ${importedData.length} manga nel backup. Vuoi ripristinare le loro copertine nel tuo database attuale? (Le altre info dei manga non verranno modificate).`,
+            'confirm',
+            async () => {
+              const { restoreCoversLocal } = await import('../db.js');
+              const restoredCount = await restoreCoversLocal(importedData);
+              showModal('Successo', `Ripristinate ${restoredCount} copertine con successo!`, 'info', () => window.location.reload());
+            }
+          );
+        } else {
+          showModal('Errore', 'Formato file non valido.');
+        }
+      } catch (err) {
+        console.error(err);
+        showModal('Errore', 'Errore durante la lettura del file.');
+      }
+    };
+    reader.readAsText(file);
+    // Reset file input
+    e.target.value = '';
+  };
+
   const handleImport = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -485,6 +522,15 @@ export default function Info({ onRefresh, settings, onSettingsChange, onOpenHist
                 >
                   📥 Importa backup
                   <input type="file" accept=".json,.html" onChange=${handleImportUnified} style="display: none;" />
+                </label>
+                <label 
+                  style="flex: 1; padding: 12px; background: rgba(255, 255, 255, 0.05); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; font-family: inherit; font-size: 14px; font-weight: 500; line-height: 1.2; text-align: center;"
+                  onMouseEnter=${e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+                  onMouseLeave=${e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                  title="Ripristina solo le copertine da un backup JSON, senza sovrascrivere le altre info"
+                >
+                  🖼️ Ripristina Cover
+                  <input type="file" accept=".json" onChange=${handleImportCovers} style="display: none;" />
                 </label>
             </div>
         </div>
